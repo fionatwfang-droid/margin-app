@@ -1,0 +1,18 @@
+
+{
+  "name": "留白 Margin",
+  "short_name": "留白",
+  "description": "智慧理財手帳 - 於繁雜帳目中，尋一份生活餘裕。",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#eae0d5",
+  "theme_color": "#22333b",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='160' fill='%2322333b'/%3E%3Cpath d='M160 352h160M320 352V192' stroke='%23c6ac8f' stroke-width='24' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='160' cy='160' r='32' fill='%23c6ac8f'/%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

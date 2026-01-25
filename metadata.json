@@ -1,0 +1,7 @@
+{
+  "name": "留白 Margin - 智慧理財手帳",
+  "description": "一個具備 PWA 功能的智慧記帳 App，支持現金、信用卡、銀行轉帳，並提供 AI 支出洞察。專為追求生活品質與留白美學的用戶設計。",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
