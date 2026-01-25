@@ -23,9 +23,9 @@ export interface Account {
   name: string;
   type: AccountType;
   balance: number;
-  limit?: number; // For credit cards
-  billingCycleDate?: number; // 帳單結算日 (1-31)
-  paymentDueDate?: number;   // 帳單繳款日 (1-31)
+  limit?: number; // 信用卡額度
+  billingCycleDate?: number; // 結算日 (1-31)
+  paymentDueDate?: number;   // 繳款日 (1-31)
 }
 
 export interface Category {
@@ -33,17 +33,12 @@ export interface Category {
   name: string;
   icon: string;
   color: string;
-  type: TransactionType; // 區分支出、收入或轉帳
+  type: TransactionType;
 }
 
 export interface Budget {
   categoryId: string;
   amount: number;
-}
-
-export interface InstallmentInfo {
-  totalMonths: number;
-  currentMonth: number;
 }
 
 export interface Transaction {
@@ -52,13 +47,11 @@ export interface Transaction {
   type: TransactionType;
   date: string;
   accountId: string;
-  toAccountId?: string; // For transfers
+  toAccountId?: string; 
   categoryId: string;
   note: string;
   isRecurring: boolean;
-  frequency?: Frequency;
   isInstallment: boolean;
-  installmentInfo?: InstallmentInfo;
 }
 
 export interface SpendingInsight {

@@ -2,17 +2,24 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { Transaction, Account, Category } from "../types";
 
-// Always use the API key directly from process.env.API_KEY.
-// Initialization MUST use a named parameter: new GoogleGenAI({ apiKey: process.env.API_KEY }).
+// Helper to safely get API key
+const getApiKey = () => {
+  try {
+    return (typeof process !== 'undefined' && process.env && process.env.API_KEY) || null;
+  } catch {
+    return null;
+  }
+};
 
 export const generateSpendingInsights = async (
   transactions: Transaction[],
   accounts: Account[],
   categories: Category[]
 ) => {
-  if (!process.env.API_KEY) return null;
+  const apiKey = getApiKey();
+  if (!apiKey) return null;
   
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = new GoogleGenAI({ apiKey });
   
   const contextData = transactions.map(t => ({
     amount: t.amount,
@@ -42,7 +49,6 @@ export const generateSpendingInsights = async (
       }
     });
     
-    // Use .text property directly, do not call it as a method.
     return JSON.parse(response.text || '{}');
   } catch (error) {
     console.error("Gemini Error:", error);
@@ -51,9 +57,10 @@ export const generateSpendingInsights = async (
 };
 
 export const parseSmartTransaction = async (text: string, accounts: Account[], categories: Category[]) => {
-  if (!process.env.API_KEY) return null;
+  const apiKey = getApiKey();
+  if (!apiKey) return null;
   
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = new GoogleGenAI({ apiKey });
   
   const prompt = `請將這段自然語言描述轉換為結構化的 JSON。
   描述內容："${text}"
@@ -91,8 +98,9 @@ export const parseSmartTransaction = async (text: string, accounts: Account[], c
 };
 
 export const analyzeCSVMapping = async (sampleRows: any[]) => {
-  if (!process.env.API_KEY) return null;
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const apiKey = getApiKey();
+  if (!apiKey) return null;
+  const ai = new GoogleGenAI({ apiKey });
 
   const prompt = `我有一份 CSV 檔案的資料樣本（JSON 格式）：
   ${JSON.stringify(sampleRows)}

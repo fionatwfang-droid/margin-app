@@ -6,64 +6,53 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>留白 Margin - 智慧理財手帳</title>
   
-  <!-- PWA & Mobile Meta -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#22333b">
-  <link rel="manifest" href="manifest.json">
   
-  <!-- Favicon & App Icon (Poetic Minimalist Version) -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='160' fill='%2322333b'/%3E%3Cpath d='M160 352h160M320 352V192' stroke='%23c6ac8f' stroke-width='24' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='160' cy='160' r='32' fill='%23c6ac8f'/%3E%3C/svg%3E">
-  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='160' fill='%2322333b'/%3E%3Cpath d='M160 352h160M320 352V192' stroke='%23c6ac8f' stroke-width='24' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='160' cy='160' r='32' fill='%23c6ac8f'/%3E%3C/svg%3E">
-
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- 加入 Babel 以支援瀏覽器解析 TSX -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            'fin-paper': '#eae0d5',      // 紙感背景
-            'fin-ink': '#0a0908',        // 墨黑文字
-            'fin-midnight': '#22333b',   // 點綴深藍
-            'fin-linen': '#c6ac8f',      // 亞麻強調
-            'fin-wood': '#5e503f',       // 溫潤線條
-          },
-          letterSpacing: {
-            'relaxed-sm': '0.05em',
-            'ultra-wide': '0.2em',
+            'fin-paper': '#eae0d5',
+            'fin-ink': '#0a0908',
+            'fin-midnight': '#22333b',
+            'fin-linen': '#c6ac8f',
+            'fin-wood': '#5e503f',
           }
         }
       }
     }
   </script>
   <style>
-    body { 
-      font-family: 'Inter', sans-serif; 
-      background-color: #eae0d5; 
-      color: #0a0908; 
-      letter-spacing: 0.01em;
-      overscroll-behavior-y: none;
-    }
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    body { font-family: 'Inter', sans-serif; background-color: #eae0d5; color: #0a0908; margin: 0; }
     .fade-up { animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    button { -webkit-tap-highlight-color: transparent; }
+    #error-display { position: fixed; bottom: 0; left: 0; right: 0; background: #fee2e2; color: #991b1b; padding: 1rem; font-family: monospace; font-size: 12px; z-index: 9999; display: none; }
   </style>
+
 <script type="importmap">
 {
   "imports": {
-    "@google/genai": "https://esm.sh/@google/genai@^1.37.0",
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "react": "https://esm.sh/react@^19.2.3",
-    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
-    "recharts": "https://esm.sh/recharts@^3.6.0",
+    "react": "https://esm.sh/react@19.2.3",
+    "react-dom": "https://esm.sh/react-dom@19.2.3",
+    "react-dom/client": "https://esm.sh/react-dom@19.2.3/client",
+    "lucide-react": "https://esm.sh/lucide-react@0.562.0",
+    "recharts": "https://esm.sh/recharts@3.6.0?external=react,react-dom",
+    "papaparse": "https://esm.sh/papaparse@5.4.1",
+    "@google/genai": "https://esm.sh/@google/genai@1.37.0",
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "papaparse": "https://esm.sh/papaparse@^5.4.1"
+    "react/": "https://esm.sh/react@^19.2.3/"
   }
 }
 </script>
@@ -71,6 +60,19 @@
 </head>
 <body class="bg-fin-paper text-fin-ink overflow-x-hidden">
   <div id="root"></div>
+  <div id="error-display"></div>
+
+  <script>
+    window.onerror = function(msg, url, line, col, error) {
+      const display = document.getElementById('error-display');
+      display.style.display = 'block';
+      display.innerHTML = `<strong>Error:</strong> ${msg}<br><small>at ${url}:${line}:${col}</small>`;
+      return false;
+    };
+  </script>
+
+  <!-- 告訴 Babel 這是一個 TypeScript/React 檔案 -->
+  <script type="text/babel" data-type="module" data-presets="typescript,react" src="index.tsx"></script>
 <script type="module" src="/index.tsx"></script>
 </body>
 </html>
