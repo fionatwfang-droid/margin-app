@@ -10,12 +10,10 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#22333b">
   
+  <!-- 重新加入 Tailwind CSS CDN 以確保樣式立即生效 -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
-  <!-- 加入 Babel 以支援瀏覽器解析 TSX -->
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
   <script>
     tailwind.config = {
       theme: {
@@ -31,6 +29,7 @@
       }
     }
   </script>
+
   <style>
     body { font-family: 'Inter', sans-serif; background-color: #eae0d5; color: #0a0908; margin: 0; }
     .fade-up { animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
@@ -38,21 +37,27 @@
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    #error-display { position: fixed; bottom: 0; left: 0; right: 0; background: #fee2e2; color: #991b1b; padding: 1rem; font-family: monospace; font-size: 12px; z-index: 9999; display: none; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    
+    /* 防止 Vercel/Vite 預設樣式干擾 */
+    #root { min-height: 100vh; }
   </style>
 
 <script type="importmap">
 {
   "imports": {
-    "react": "https://esm.sh/react@19.2.3",
-    "react-dom": "https://esm.sh/react-dom@19.2.3",
-    "react-dom/client": "https://esm.sh/react-dom@19.2.3/client",
-    "lucide-react": "https://esm.sh/lucide-react@0.562.0",
-    "recharts": "https://esm.sh/recharts@3.6.0?external=react,react-dom",
-    "papaparse": "https://esm.sh/papaparse@5.4.1",
-    "@google/genai": "https://esm.sh/@google/genai@1.37.0",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom": "https://esm.sh/react-dom@^19.2.3",
+    "react-dom/client": "https://esm.sh/react-dom@^19.2.3/client",
+    "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
+    "@google/genai": "https://esm.sh/@google/genai@^1.38.0",
+    "recharts": "https://esm.sh/recharts@^3.7.0",
+    "papaparse": "https://esm.sh/papaparse@^5.5.3",
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "react/": "https://esm.sh/react@^19.2.3/"
+    "vite": "https://esm.sh/vite@^7.3.1",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2"
   }
 }
 </script>
@@ -60,19 +65,8 @@
 </head>
 <body class="bg-fin-paper text-fin-ink overflow-x-hidden">
   <div id="root"></div>
-  <div id="error-display"></div>
-
-  <script>
-    window.onerror = function(msg, url, line, col, error) {
-      const display = document.getElementById('error-display');
-      display.style.display = 'block';
-      display.innerHTML = `<strong>Error:</strong> ${msg}<br><small>at ${url}:${line}:${col}</small>`;
-      return false;
-    };
-  </script>
-
-  <!-- 告訴 Babel 這是一個 TypeScript/React 檔案 -->
-  <script type="text/babel" data-type="module" data-presets="typescript,react" src="index.tsx"></script>
+  <!-- 確保路徑在 Vercel 中能被正確解析 -->
+  <script type="module" src="./index.tsx"></script>
 <script type="module" src="/index.tsx"></script>
 </body>
 </html>
