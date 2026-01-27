@@ -1,8 +1,8 @@
 
 import React, { useState, useRef } from 'react';
 import Papa from 'papaparse';
-import { Transaction, TransactionType, Account, Category } from '../types';
-import { CATEGORIES, ICON_MAP } from '../constants';
+import { Transaction, TransactionType, Account } from '../types';
+import { CATEGORIES } from '../constants';
 import { analyzeCSVMapping } from '../services/geminiService';
 import { FileUp, Check, Loader2, Trash2 } from 'lucide-react';
 
@@ -33,7 +33,7 @@ const CSVImporterModal: React.FC<Props> = ({ isOpen, onClose, onImport, accounts
     setLoading(true);
 
     Papa.parse(file, {
-      complete: async (results) => {
+      complete: async (results: Papa.ParseResult<any>) => {
         const rows = results.data as any[];
         const cleanRows = rows.filter(row => row.length > 1);
         const sample = cleanRows.slice(0, 5);
@@ -64,7 +64,7 @@ const CSVImporterModal: React.FC<Props> = ({ isOpen, onClose, onImport, accounts
         }
         setLoading(false);
       },
-      error: (error) => {
+      error: (error: Error) => {
         alert('解析失敗：' + error.message);
         setLoading(false);
       }

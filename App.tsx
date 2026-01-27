@@ -1,16 +1,16 @@
 
 import React, { useState, useEffect } from 'react';
-import Layout from './components/Layout.tsx';
-import Dashboard from './components/Dashboard.tsx';
-import Analysis from './components/Analysis.tsx';
-import AccountList from './components/AccountList.tsx';
-import AICoach from './components/AICoach.tsx';
-import TransactionModal from './components/TransactionModal.tsx';
-import AccountModal from './components/AccountModal.tsx';
-import CSVImporterModal from './components/CSVImporterModal.tsx';
-import SyncModal from './components/SyncModal.tsx';
-import { Transaction, Account, TransactionType, Budget, AccountType } from './types.ts';
-import { INITIAL_ACCOUNTS, CATEGORIES } from './constants.tsx';
+import Layout from './components/Layout';
+import Dashboard from './components/Dashboard';
+import Analysis from './components/Analysis';
+import AccountList from './components/AccountList';
+import AICoach from './components/AICoach';
+import TransactionModal from './components/TransactionModal';
+import AccountModal from './components/AccountModal';
+import CSVImporterModal from './components/CSVImporterModal';
+import SyncModal from './components/SyncModal';
+import { Transaction, Account, TransactionType, Budget } from './types';
+import { INITIAL_ACCOUNTS, CATEGORIES } from './constants';
 import { Plus, RefreshCw, Search, X, Pencil, Trash2, FileDown, FileUp } from 'lucide-react';
 
 const App: React.FC = () => {

@@ -1,10 +1,10 @@
 
 import React, { useState } from 'react';
-import { Transaction, Account, TransactionType, Budget, AccountType } from '../types.ts';
-import { ICON_MAP, CATEGORIES } from '../constants.tsx';
+import { Transaction, Account, TransactionType, Budget, AccountType } from '../types';
+import { ICON_MAP } from '../constants';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { AlertTriangle, Target, ArrowRightLeft, CreditCard as CreditIcon, TrendingDown } from 'lucide-react';
-import BudgetModal from './BudgetModal.tsx';
+import { CreditCard as CreditIcon, TrendingDown } from 'lucide-react';
+import BudgetModal from './BudgetModal';
 
 interface Props {
   transactions: Transaction[];
@@ -91,8 +91,8 @@ const Dashboard: React.FC<Props> = ({ transactions, accounts, budgets, totalBudg
           )}
         </div>
 
-        <div className="bg-fin-paper p-8 rounded-[2.5rem] border border-fin-linen/20">
-          <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-fin-midnight mb-6">Budget / 預算進度</p>
+        <div className="bg-fin-paper p-8 rounded-[2.5rem] border border-fin-linen/20 cursor-pointer" onClick={() => setIsBudgetModalOpen(true)}>
+          <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-fin-midnight mb-6">Budget / 預算進度 (點擊設定)</p>
           <div className="flex items-end gap-3 mb-4">
             <h3 className="text-4xl font-black text-fin-ink">{Math.floor(totalBudgetProgress)}%</h3>
             <span className="text-[10px] font-bold text-fin-wood/40 mb-2 uppercase tracking-widest">Spent</span>
@@ -121,17 +121,6 @@ const Dashboard: React.FC<Props> = ({ transactions, accounts, budgets, totalBudg
               <Area type="monotone" dataKey="value" stroke="#c6ac8f" strokeWidth={3} fill="url(#areaGrad)" />
             </AreaChart>
           </ResponsiveContainer>
-        </div>
-
-        <div className="bg-white p-10 rounded-[3rem] shadow-sm border border-fin-ink/5 space-y-4">
-          <h4 className="text-xl font-bold text-fin-ink tracking-tight mb-4">Quick Tools</h4>
-          <button className="w-full flex items-center justify-between p-5 bg-fin-paper/20 rounded-2xl hover:bg-fin-paper/40 transition-all text-left">
-            <div>
-              <p className="text-[11px] font-black text-fin-midnight uppercase">Transfer / 帳務互轉</p>
-              <p className="text-[8px] font-bold text-fin-wood/40 mt-1">繳卡費、ATM 提款</p>
-            </div>
-            <ArrowRightLeft className="w-4 h-4 text-fin-linen" />
-          </button>
         </div>
       </div>
       
