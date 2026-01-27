@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Copy, Download, Upload, Check, RefreshCw } from 'lucide-react';
+import { Copy, Download, Upload, Check, RefreshCw, Share2 } from 'lucide-react';
 
 interface Props {
   isOpen: boolean;
@@ -16,17 +16,37 @@ const SyncModal: React.FC<Props> = ({ isOpen, onClose, onImportAll, currentData 
 
   if (!isOpen) return null;
 
-  const handleExport = () => {
+  const getEncodedData = () => {
     const dataStr = JSON.stringify(currentData);
-    const encoded = btoa(encodeURIComponent(dataStr)); // Simple encoding
+    return btoa(encodeURIComponent(dataStr));
+  };
+
+  const handleExport = () => {
+    const encoded = getEncodedData();
     navigator.clipboard.writeText(encoded);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleShare = async () => {
+    const encoded = getEncodedData();
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: '留白 Margin 同步數據',
+          text: encoded
+        });
+      } catch (err) {
+        console.log('Share failed', err);
+      }
+    } else {
+      handleExport();
+    }
+  };
+
   const handleImport = () => {
     try {
-      const decoded = decodeURIComponent(atob(syncString));
+      const decoded = decodeURIComponent(atob(syncString.trim()));
       const data = JSON.parse(decoded);
       if (data.accounts && data.transactions) {
         onImportAll(data);
@@ -49,7 +69,7 @@ const SyncModal: React.FC<Props> = ({ isOpen, onClose, onImportAll, currentData 
         <div className="px-10 py-8 border-b border-fin-paper flex justify-between items-center bg-fin-paper/10">
           <div>
             <h2 className="text-xl font-bold text-fin-midnight tracking-tight uppercase">同步中心 / Sync Hub</h2>
-            <p className="text-[9px] text-fin-linen font-bold uppercase tracking-widest mt-1">Cross-device data migration</p>
+            <p className="text-[9px] text-fin-linen font-bold uppercase tracking-widest mt-1">跨裝置數據轉移 Cross-device Migration</p>
           </div>
           <button onClick={onClose} className="p-2 text-fin-midnight/20 hover:text-fin-midnight transition-all text-2xl">&times;</button>
         </div>
@@ -58,18 +78,28 @@ const SyncModal: React.FC<Props> = ({ isOpen, onClose, onImportAll, currentData 
           {/* Export Section */}
           <div className="space-y-4">
             <h3 className="text-xs font-bold text-fin-midnight uppercase tracking-widest flex items-center gap-2">
-              <RefreshCw className="w-3 h-3 text-fin-linen" /> 1. 生成當前裝置快照
+              <RefreshCw className="w-3 h-3 text-fin-linen" /> 1. 生成當前裝置數據 (導出)
             </h3>
             <div className="p-8 bg-fin-midnight rounded-[2rem] text-fin-paper relative overflow-hidden group">
-              <p className="text-[10px] text-fin-linen/60 mb-4 font-semibold leading-relaxed">
-                點擊下方按鈕將當前所有帳戶、餘額與紀錄打包。您可以將此代碼傳送到您的手機或另一台電腦貼上。
+              <p className="text-[10px] text-fin-linen/60 mb-6 font-semibold leading-relaxed">
+                將此裝置的所有紀錄打包。透過分享功能傳送至另一台手機或電腦貼上即可同步。
               </p>
-              <button 
-                onClick={handleExport}
-                className="w-full bg-white/10 hover:bg-white/20 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-3 transition-all border border-white/10"
-              >
-                {copied ? <><Check className="w-4 h-4 text-fin-linen" /> 已複製到剪貼簿</> : <><Copy className="w-4 h-4" /> 複製同步代碼</>}
-              </button>
+              <div className="flex gap-3">
+                <button 
+                  onClick={handleExport}
+                  className="flex-[2] bg-white/10 hover:bg-white/20 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-3 transition-all border border-white/10"
+                >
+                  {copied ? <Check className="w-4 h-4 text-fin-linen" /> : <Copy className="w-4 h-4" />}
+                  <span className="text-[11px] uppercase tracking-widest">{copied ? '已複製' : '複製代碼'}</span>
+                </button>
+                <button 
+                  onClick={handleShare}
+                  className="flex-1 bg-fin-linen text-fin-midnight font-bold py-4 rounded-2xl flex items-center justify-center gap-3 transition-all shadow-lg"
+                >
+                  <Share2 className="w-4 h-4" />
+                  <span className="text-[11px] uppercase tracking-widest">一鍵分享</span>
+                </button>
+              </div>
             </div>
           </div>
 
@@ -78,24 +108,27 @@ const SyncModal: React.FC<Props> = ({ isOpen, onClose, onImportAll, currentData 
           {/* Import Section */}
           <div className="space-y-4">
             <h3 className="text-xs font-bold text-fin-midnight uppercase tracking-widest flex items-center gap-2">
-              <Upload className="w-3 h-3 text-fin-linen" /> 2. 匯入其他裝置數據
+              <Upload className="w-3 h-3 text-fin-linen" /> 2. 接收並匯入新數據 (覆蓋)
             </h3>
             <textarea
               value={syncString}
               onChange={(e) => setSyncString(e.target.value)}
               placeholder="請在此貼上來自其他裝置的同步代碼..."
-              className="w-full bg-fin-paper/20 border-2 border-fin-paper rounded-[1.5rem] p-6 text-xs font-mono text-fin-ink outline-none focus:border-fin-midnight h-32 transition-all resize-none"
+              className="w-full bg-fin-paper/20 border-2 border-fin-paper rounded-[1.5rem] p-6 text-xs font-mono text-fin-ink outline-none focus:border-fin-midnight h-32 transition-all resize-none placeholder:text-fin-wood/20"
             />
             <button 
               onClick={handleImport}
-              disabled={!syncString}
+              disabled={!syncString.trim()}
               className="w-full bg-fin-midnight hover:bg-fin-ink disabled:opacity-20 text-fin-paper font-bold py-5 rounded-[1.5rem] transition-all shadow-xl uppercase tracking-[0.2em] text-[11px]"
             >
-              {imported ? "同步成功！Refreshing..." : "覆蓋並同步資料 OVERWRITE & SYNC"}
+              {imported ? "同步成功！Refreshing..." : "覆蓋並同步資料 DATA OVERWRITE"}
             </button>
-            <p className="text-[9px] text-center text-fin-wood/40 font-bold uppercase tracking-widest italic">
-              注意：此動作將會覆蓋當前裝置的所有本地資料。
-            </p>
+            <div className="flex items-center gap-3 justify-center">
+              <div className="w-1.5 h-1.5 bg-red-800 rounded-full animate-pulse"></div>
+              <p className="text-[9px] text-fin-wood/40 font-bold uppercase tracking-widest italic">
+                注意：匯入後將清除此裝置目前的資料
+              </p>
+            </div>
           </div>
         </div>
       </div>

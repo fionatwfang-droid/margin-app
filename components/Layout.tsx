@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { ICON_MAP } from '../constants';
+import { Database } from 'lucide-react';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -39,13 +40,11 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab }) =>
               <p className="text-[8px] font-bold text-fin-wood/30 uppercase tracking-[0.4em]">Essence of Flow</p>
             </div>
           </div>
-          <div className="space-y-1.5 opacity-80">
-            <p className="text-[11px] font-medium text-fin-ink tracking-wider">
-              於繁雜帳目中，尋一份生活餘裕。
-            </p>
-            <p className="text-[9px] font-bold text-fin-wood/40 tracking-[0.25em] uppercase">
-              AT THE EDGE OF BALANCE.
-            </p>
+          <div className="flex items-center gap-2 px-4 py-2 bg-fin-midnight/5 border border-fin-midnight/10 rounded-full w-fit">
+            <div className="w-1.5 h-1.5 bg-green-600 rounded-full animate-pulse"></div>
+            <span className="text-[8px] font-bold uppercase text-fin-midnight/60 tracking-widest flex items-center gap-1">
+              <Database className="w-2.5 h-2.5" /> Local Storage Active
+            </span>
           </div>
         </div>
         
