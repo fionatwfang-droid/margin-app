@@ -2,14 +2,15 @@
 import React from 'react';
 import { Account, AccountType } from '../types';
 import { ICON_MAP } from '../constants';
-import { CalendarClock, ArrowUpRight, ShieldCheck, Wallet } from 'lucide-react';
+import { CalendarClock, ArrowUpRight, ShieldCheck, Wallet, Globe, Trash2 } from 'lucide-react';
 
 interface Props {
   accounts: Account[];
   onAddClick: () => void;
+  onDelete: (id: string) => void;
 }
 
-const AccountList: React.FC<Props> = ({ accounts, onAddClick }) => {
+const AccountList: React.FC<Props> = ({ accounts, onAddClick, onDelete }) => {
   const getAccountStyles = (type: AccountType) => {
     switch(type) {
       case AccountType.BANK: 
@@ -36,6 +37,14 @@ const AccountList: React.FC<Props> = ({ accounts, onAddClick }) => {
           icon: ICON_MAP.Wallet,
           badge: <Wallet className="w-3 h-3" />
         };
+      case AccountType.FOREIGN_CURRENCY:
+        return {
+          label: 'Foreign / 外幣資產',
+          bg: 'bg-[#e9f1f5]',
+          accent: 'text-[#2b4c5e]',
+          icon: <Globe className="w-5 h-5" />,
+          badge: <Globe className="w-3 h-3" />
+        };
       default: return { label: 'Other', bg: 'bg-white', accent: 'text-fin-ink', icon: ICON_MAP.MoreHorizontal, badge: null };
     }
   };
@@ -45,9 +54,18 @@ const AccountList: React.FC<Props> = ({ accounts, onAddClick }) => {
       {accounts.map((acc) => {
         const style = getAccountStyles(acc.type);
         const isCredit = acc.type === AccountType.CREDIT_CARD;
+        const isForeign = acc.type === AccountType.FOREIGN_CURRENCY;
         
         return (
-          <div key={acc.id} className="group h-full">
+          <div key={acc.id} className="group h-full relative">
+            {/* Delete Button */}
+            <button 
+              onClick={() => onDelete(acc.id)}
+              className="absolute top-6 right-6 z-20 p-2 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white rounded-xl transition-all opacity-0 group-hover:opacity-100"
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
+
             <div className={`p-10 rounded-[3rem] ${style.bg} border border-fin-wood/5 shadow-xl transition-all duration-500 group-hover:shadow-fin-linen/20 group-hover:-translate-y-2 relative overflow-hidden h-full flex flex-col`}>
               
               <div className="flex justify-between items-start mb-10 relative z-10">
@@ -58,7 +76,7 @@ const AccountList: React.FC<Props> = ({ accounts, onAddClick }) => {
                   <span className={`text-[9px] font-black uppercase tracking-[0.2em] block mb-1 ${isCredit ? 'text-fin-linen' : 'text-fin-wood'}`}>
                     {style.label}
                   </span>
-                  <div className={`h-1 w-8 rounded-full ${isCredit ? 'bg-fin-linen' : 'bg-fin-midnight'}`}></div>
+                  <div className={`h-1 w-8 rounded-full ${isCredit ? 'bg-fin-linen' : (isForeign ? 'bg-[#5e8ba2]' : 'bg-fin-midnight')}`}></div>
                 </div>
               </div>
 
@@ -66,7 +84,9 @@ const AccountList: React.FC<Props> = ({ accounts, onAddClick }) => {
                 <h3 className={`text-2xl font-black mb-1 tracking-tight truncate ${style.accent}`}>{acc.name}</h3>
                 <div className="flex items-center gap-2 opacity-40">
                   {style.badge}
-                  <span className={`text-[8px] font-bold uppercase tracking-[0.3em] ${style.accent}`}>Secure Vault</span>
+                  <span className={`text-[8px] font-bold uppercase tracking-[0.3em] ${style.accent}`}>
+                    {isForeign ? `Currency: ${acc.currency || 'USD'}` : 'Secure Vault'}
+                  </span>
                 </div>
               </div>
 
@@ -91,10 +111,15 @@ const AccountList: React.FC<Props> = ({ accounts, onAddClick }) => {
 
               <div className="mt-auto pt-6 flex justify-between items-end relative z-10">
                 <div className="min-w-0 flex-1">
-                  <p className={`text-[9px] font-black uppercase tracking-widest mb-2 ${isCredit ? 'text-fin-paper/40' : 'text-fin-wood/40'}`}>可用資產/欠款</p>
-                  <p className={`text-3xl font-black truncate ${acc.balance < 0 ? (isCredit ? 'text-fin-paper' : 'text-red-800') : style.accent}`}>
-                    ${Math.abs(acc.balance).toLocaleString()}
+                  <p className={`text-[9px] font-black uppercase tracking-widest mb-2 ${isCredit ? 'text-fin-paper/40' : 'text-fin-wood/40'}`}>
+                    {isForeign ? '持幣餘額' : '可用資產/欠款'}
                   </p>
+                  <div className="flex items-baseline gap-1">
+                    <p className={`text-3xl font-black truncate ${acc.balance < 0 ? (isCredit ? 'text-fin-paper' : 'text-red-800') : style.accent}`}>
+                      {isForeign ? '' : '$'}{Math.abs(acc.balance).toLocaleString()}
+                    </p>
+                    {isForeign && <span className="text-xs font-black opacity-40">{acc.currency || 'USD'}</span>}
+                  </div>
                 </div>
                 {isCredit && acc.limit && (
                   <div className="text-right pl-4">
@@ -107,7 +132,7 @@ const AccountList: React.FC<Props> = ({ accounts, onAddClick }) => {
               </div>
 
               {/* 背景裝飾元素 */}
-              <div className={`absolute top-0 right-0 w-48 h-48 rounded-full blur-[60px] -mr-24 -mt-24 pointer-events-none opacity-20 ${isCredit ? 'bg-fin-linen' : 'bg-fin-midnight'}`}></div>
+              <div className={`absolute top-0 right-0 w-48 h-48 rounded-full blur-[60px] -mr-24 -mt-24 pointer-events-none opacity-20 ${isCredit ? 'bg-fin-linen' : (isForeign ? 'bg-[#5e8ba2]' : 'bg-fin-midnight')}`}></div>
             </div>
           </div>
         );

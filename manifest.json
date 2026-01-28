@@ -1,10 +1,11 @@
 
 {
-  "name": "留白 Margin",
-  "short_name": "留白",
+  "name": "留白 Margin - 智慧理財手帳",
+  "short_name": "留白 Margin",
   "description": "智慧理財手帳 - 於繁雜帳目中，尋一份生活餘裕。",
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#eae0d5",
   "theme_color": "#22333b",
   "icons": [
@@ -13,6 +14,14 @@
       "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "any maskable"
+    }
+  ],
+  "categories": ["finance", "lifestyle"],
+  "shortcuts": [
+    {
+      "name": "新增紀錄",
+      "url": "/?entry=true",
+      "description": "快速開啟記帳視窗"
     }
   ]
 }

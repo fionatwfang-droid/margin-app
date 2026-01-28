@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Account, AccountType } from '../types';
 import { ICON_MAP } from '../constants';
-import { CreditCard, Wallet, Landmark, CalendarDays } from 'lucide-react';
+import { CreditCard, Wallet, Landmark, CalendarDays, Globe } from 'lucide-react';
 
 interface Props {
   isOpen: boolean;
@@ -15,6 +15,7 @@ const AccountModal: React.FC<Props> = ({ isOpen, onClose, onAdd }) => {
   const [name, setName] = useState('');
   const [balance, setBalance] = useState('');
   const [limit, setLimit] = useState('');
+  const [currency, setCurrency] = useState('USD');
   const [billingDate, setBillingDate] = useState('10');
   const [dueDate, setDueDate] = useState('25');
 
@@ -28,6 +29,7 @@ const AccountModal: React.FC<Props> = ({ isOpen, onClose, onAdd }) => {
       name,
       type,
       balance: parseFloat(balance),
+      currency: type === AccountType.FOREIGN_CURRENCY ? currency.toUpperCase() : 'TWD',
       ...(type === AccountType.CREDIT_CARD ? {
         limit: parseFloat(limit) || 0,
         billingCycleDate: parseInt(billingDate),
@@ -40,6 +42,7 @@ const AccountModal: React.FC<Props> = ({ isOpen, onClose, onAdd }) => {
     setName('');
     setBalance('');
     setLimit('');
+    setCurrency('USD');
     onClose();
   };
 
@@ -51,19 +54,20 @@ const AccountModal: React.FC<Props> = ({ isOpen, onClose, onAdd }) => {
           <button onClick={onClose} className="p-2 hover:bg-fin-paper rounded-xl text-fin-midnight/30 hover:text-fin-midnight transition-all">&times;</button>
         </div>
         
-        <form onSubmit={handleSubmit} className="p-10 space-y-8">
+        <form onSubmit={handleSubmit} className="p-10 space-y-8 overflow-y-auto max-h-[70vh] no-scrollbar">
           {/* Type Selector */}
-          <div className="flex p-1.5 bg-fin-paper/40 rounded-[1.5rem]">
+          <div className="grid grid-cols-2 gap-2 p-1.5 bg-fin-paper/40 rounded-[1.5rem]">
             {[
               { id: AccountType.CASH, label: '現金', icon: <Wallet className="w-3.5 h-3.5" /> },
               { id: AccountType.BANK, label: '銀行', icon: <Landmark className="w-3.5 h-3.5" /> },
-              { id: AccountType.CREDIT_CARD, label: '信用卡', icon: <CreditCard className="w-3.5 h-3.5" /> }
+              { id: AccountType.CREDIT_CARD, label: '信用卡', icon: <CreditCard className="w-3.5 h-3.5" /> },
+              { id: AccountType.FOREIGN_CURRENCY, label: '外幣', icon: <Globe className="w-3.5 h-3.5" /> }
             ].map(btn => (
               <button
                 key={btn.id}
                 type="button"
                 onClick={() => setType(btn.id)}
-                className={`flex-1 py-3 flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-[0.1em] rounded-[1rem] transition-all ${
+                className={`py-3 flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-[0.1em] rounded-[1rem] transition-all ${
                   type === btn.id ? 'bg-fin-midnight text-fin-paper shadow-lg' : 'text-fin-midnight/40 hover:text-fin-midnight'
                 }`}
               >
@@ -82,14 +86,18 @@ const AccountModal: React.FC<Props> = ({ isOpen, onClose, onAdd }) => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 className="w-full bg-fin-paper/20 border-b-2 border-fin-paper focus:border-fin-midnight py-3 px-1 text-xl font-bold text-fin-ink outline-none transition-colors"
-                placeholder="例如：渣打理財、日常錢包..."
+                placeholder="例如：台銀外幣、玉山美金..."
               />
             </div>
 
             <div className="relative group">
-              <label className="block text-[10px] font-bold text-fin-midnight uppercase tracking-[0.4em] mb-2 px-1">Initial Balance 初始餘額</label>
+              <label className="block text-[10px] font-bold text-fin-midnight uppercase tracking-[0.4em] mb-2 px-1">
+                {type === AccountType.FOREIGN_CURRENCY ? 'Current Balance 外幣金額' : 'Initial Balance 初始餘額'}
+              </label>
               <div className="relative border-b-2 border-fin-paper group-focus-within:border-fin-midnight transition-colors">
-                <span className="absolute left-0 top-1/2 -translate-y-1/2 text-fin-midnight/40 font-bold text-2xl">$</span>
+                <span className="absolute left-0 top-1/2 -translate-y-1/2 text-fin-midnight/40 font-bold text-2xl">
+                  {type === AccountType.FOREIGN_CURRENCY ? '' : '$'}
+                </span>
                 <input
                   type="number"
                   required
@@ -100,6 +108,20 @@ const AccountModal: React.FC<Props> = ({ isOpen, onClose, onAdd }) => {
                 />
               </div>
             </div>
+
+            {/* Foreign Currency Specific */}
+            {type === AccountType.FOREIGN_CURRENCY && (
+              <div className="relative animate-in fade-in slide-in-from-top-4 duration-500">
+                <label className="block text-[10px] font-bold text-fin-midnight uppercase tracking-[0.4em] mb-2 px-1">Currency Code 幣別代碼</label>
+                <input
+                  type="text"
+                  value={currency}
+                  onChange={(e) => setCurrency(e.target.value)}
+                  className="w-full bg-fin-paper/20 border border-fin-paper rounded-xl px-4 py-3 text-sm font-bold text-fin-ink outline-none focus:border-fin-midnight"
+                  placeholder="USD, JPY, EUR..."
+                />
+              </div>
+            )}
 
             {/* Credit Card Extra Fields */}
             {type === AccountType.CREDIT_CARD && (
