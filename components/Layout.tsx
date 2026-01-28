@@ -26,9 +26,11 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab }) =>
     const isPWA = (window.navigator as any).standalone || window.matchMedia('(display-mode: standalone)').matches;
     setIsStandalone(isPWA);
 
-    supabase?.auth.getSession().then(({ data: { session } }) => setSession(session));
-    const { data: { subscription } } = supabase?.auth.onAuthStateChange((_event, session) => setSession(session)) || { data: { subscription: { unsubscribe: () => {} } } };
-    return () => subscription.unsubscribe();
+    if (supabase) {
+      supabase.auth.getSession().then(({ data: { session } }: any) => setSession(session));
+      const { data: { subscription } } = supabase.auth.onAuthStateChange((_event: any, session: any) => setSession(session));
+      return () => subscription.unsubscribe();
+    }
   }, []);
 
   const navItems = [
