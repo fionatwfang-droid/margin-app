@@ -28,6 +28,10 @@
             'fin-midnight': '#22333b',
             'fin-linen': '#c6ac8f',
             'fin-wood': '#5e503f',
+          },
+          spacing: {
+            'safe-top': 'env(safe-area-inset-top)',
+            'safe-bottom': 'env(safe-area-inset-bottom)',
           }
         }
       }
@@ -35,12 +39,6 @@
   </script>
 
   <style>
-    :root {
-      --sat: env(safe-area-inset-top);
-      --sar: env(safe-area-inset-right);
-      --sab: env(safe-area-inset-bottom);
-      --sal: env(safe-area-inset-left);
-    }
     body { 
       font-family: 'Inter', sans-serif; 
       background-color: #eae0d5; 
@@ -49,18 +47,15 @@
       padding: 0;
       -webkit-tap-highlight-color: transparent;
       user-select: none;
-      overscroll-behavior-y: none; /* 防止 iOS 下拉重新整理影響佈局 */
-      height: 100vh;
+      overscroll-behavior: none;
+      height: 100dvh;
+      width: 100vw;
       overflow: hidden;
-    }
-    .fade-up { animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+      position: fixed; /* 防止 iOS 鍵盤彈出導致的佈局位移 */
     }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    #root { height: 100%; display: flex; flex-direction: column; }
+    #root { height: 100dvh; display: flex; flex-direction: column; overflow: hidden; }
   </style>
 
 <script type="importmap">

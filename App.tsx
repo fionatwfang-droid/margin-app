@@ -165,10 +165,10 @@ const App: React.FC = () => {
           CATEGORIES.find(c => c.id === tx.categoryId)?.name.toLowerCase().includes(searchTerm.toLowerCase())
         );
         return (
-          <div className="bg-white rounded-[2.5rem] shadow-sm border border-fin-ink/5 overflow-hidden fade-up">
-            <div className="p-10">
-              <div className="flex flex-col lg:flex-row justify-between items-center gap-8 mb-12">
-                <h2 className="text-2xl font-bold text-fin-ink tracking-tight uppercase">收支明細</h2>
+          <div className="bg-white rounded-[2rem] shadow-sm border border-fin-ink/5 overflow-hidden fade-up">
+            <div className="p-6 md:p-10">
+              <div className="flex flex-col lg:flex-row justify-between items-center gap-6 mb-10">
+                <h2 className="text-xl font-bold text-fin-ink tracking-tight uppercase">收支明細</h2>
                 <div className="relative w-full lg:max-w-md">
                   <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-fin-linen w-4 h-4" />
                   <input
@@ -176,33 +176,33 @@ const App: React.FC = () => {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     placeholder="搜尋備註或分類..."
-                    className="w-full bg-fin-paper/20 border border-fin-paper rounded-2xl py-4 pl-12 pr-12 text-sm font-bold text-fin-ink focus:border-fin-midnight outline-none"
+                    className="w-full bg-fin-paper/20 border border-fin-paper rounded-xl py-3.5 pl-12 pr-12 text-xs font-bold text-fin-ink focus:border-fin-midnight outline-none"
                   />
                 </div>
-                <div className="flex gap-4">
-                   <button onClick={() => setIsCSVModalOpen(true)} className="flex items-center gap-2 px-6 py-4 bg-fin-midnight text-fin-paper rounded-xl font-bold text-[10px] uppercase tracking-widest"><FileUp className="w-4 h-4" />匯入</button>
+                <div className="flex gap-4 w-full lg:w-auto">
+                   <button onClick={() => setIsCSVModalOpen(true)} className="flex-1 lg:flex-none flex items-center justify-center gap-2 px-6 py-3.5 bg-fin-midnight text-fin-paper rounded-xl font-bold text-[9px] uppercase tracking-widest"><FileUp className="w-4 h-4" />匯入</button>
                 </div>
               </div>
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {filtered.map(tx => {
                   const acc = accounts.find(a => a.id === tx.accountId);
                   const cat = CATEGORIES.find(c => c.id === tx.categoryId);
                   return (
-                    <div key={tx.id} className="p-6 bg-fin-paper/5 border border-fin-paper/20 rounded-[1.75rem] flex justify-between items-center group">
-                      <div className="flex gap-4">
-                        <div className={`w-10 h-10 ${cat?.color || 'bg-fin-linen'} rounded-xl text-white flex items-center justify-center font-bold`}>{cat?.name.charAt(0)}</div>
-                        <div>
-                          <p className="font-bold text-fin-ink">{tx.note || cat?.name}</p>
-                          <p className="text-[9px] text-fin-wood/40 uppercase font-bold tracking-widest">{acc?.name} • {tx.date}</p>
+                    <div key={tx.id} className="p-4 bg-fin-paper/5 border border-fin-paper/20 rounded-[1.25rem] flex justify-between items-center group">
+                      <div className="flex gap-3">
+                        <div className={`w-9 h-9 ${cat?.color || 'bg-fin-linen'} rounded-lg text-white flex items-center justify-center font-black text-xs`}>{cat?.name.charAt(0)}</div>
+                        <div className="min-w-0">
+                          <p className="font-bold text-fin-ink text-sm truncate max-w-[120px]">{tx.note || cat?.name}</p>
+                          <p className="text-[8px] text-fin-wood/40 uppercase font-black tracking-widest truncate">{acc?.name} • {tx.date}</p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-6">
-                        <p className={`text-lg font-bold ${tx.type === TransactionType.EXPENSE ? 'text-fin-ink' : 'text-fin-linen'}`}>
+                      <div className="flex items-center gap-4">
+                        <p className={`text-sm font-black ${tx.type === TransactionType.EXPENSE ? 'text-fin-ink' : 'text-fin-linen'}`}>
                           {tx.type === TransactionType.EXPENSE ? '-' : '+'}${tx.amount.toLocaleString()}
                         </p>
-                        <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <button onClick={() => { setEditingTransaction(tx); setIsModalOpen(true); }} className="p-2 bg-fin-paper/20 rounded-lg"><Pencil className="w-3.5 h-3.5" /></button>
-                          <button onClick={() => handleDeleteTransaction(tx.id)} className="p-2 bg-fin-paper/20 text-red-800 rounded-lg"><Trash2 className="w-3.5 h-3.5" /></button>
+                        <div className="flex gap-1 md:opacity-0 group-hover:opacity-100 transition-opacity">
+                          <button onClick={() => { setEditingTransaction(tx); setIsModalOpen(true); }} className="p-1.5 bg-fin-paper/20 rounded-lg"><Pencil className="w-3 h-3" /></button>
+                          <button onClick={() => handleDeleteTransaction(tx.id)} className="p-1.5 bg-fin-paper/20 text-red-800 rounded-lg"><Trash2 className="w-3 h-3" /></button>
                         </div>
                       </div>
                     </div>
@@ -222,29 +222,35 @@ const App: React.FC = () => {
   return (
     <Layout activeTab={activeTab} setActiveTab={setActiveTab}>
       <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-end mb-12 fade-up">
-          <div className="space-y-2">
-            <p className="text-fin-linen font-bold text-[10px] uppercase tracking-[0.4em]">Journal Flow</p>
-            <h2 className="text-4xl font-bold text-fin-ink tracking-tight">今日財務覺醒</h2>
-            <div className="flex items-center gap-4 mt-2">
-              <button onClick={() => setIsSyncModalOpen(true)} className="flex items-center gap-2 opacity-40 hover:opacity-100 transition-all">
-                <RefreshCw className="w-3 h-3" />
-                <span className="text-[9px] font-bold uppercase tracking-widest">Cross-Sync</span>
+        {/* Responsive Header for Mobile */}
+        <div className="flex flex-row justify-between items-start mb-8 gap-4 fade-up">
+          <div className="flex-1 space-y-1">
+            <p className="text-fin-linen font-black text-[7px] md:text-[9px] uppercase tracking-[0.4em]">Journal Flow</p>
+            <h2 className="text-2xl md:text-4xl font-black text-fin-ink tracking-tight leading-none">今日財務覺醒</h2>
+            
+            <div className="flex flex-wrap items-center gap-3 mt-3">
+              <button onClick={() => setIsSyncModalOpen(true)} className="flex items-center gap-1.5 opacity-40 hover:opacity-100 transition-all">
+                <RefreshCw className="w-2.5 h-2.5" />
+                <span className="text-[7px] font-black uppercase tracking-widest">Sync</span>
               </button>
               {user ? (
-                <div className="flex items-center gap-2 text-fin-midnight text-[9px] font-bold uppercase tracking-widest">
-                  <Cloud className="w-3.5 h-3.5 text-blue-500" /> Cloud Synced
+                <div className="flex items-center gap-1.5 text-fin-midnight text-[7px] font-black uppercase tracking-widest">
+                  <Cloud className="w-3 h-3 text-blue-500" /> Cloud
                 </div>
               ) : (
-                <button onClick={() => setIsAuthModalOpen(true)} className="flex items-center gap-2 text-fin-wood/40 hover:text-fin-midnight transition-all text-[9px] font-bold uppercase tracking-widest">
-                  <CloudOff className="w-3.5 h-3.5" /> Enable Cloud Sync
+                <button onClick={() => setIsAuthModalOpen(true)} className="flex items-center gap-1.5 text-fin-wood/40 hover:text-fin-midnight transition-all text-[7px] font-black uppercase tracking-widest">
+                  <CloudOff className="w-3 h-3" /> Enable
                 </button>
               )}
             </div>
           </div>
-          <button onClick={() => { setEditingTransaction(null); setIsModalOpen(true); }} className="bg-fin-midnight hover:bg-fin-ink text-fin-paper font-bold py-4 px-10 rounded-[1.5rem] flex items-center gap-3 transition-all shadow-xl">
-            <Plus className="w-5 h-5" />
-            <span className="uppercase tracking-[0.2em] text-[10px]">錄入 Entry</span>
+
+          <button 
+            onClick={() => { setEditingTransaction(null); setIsModalOpen(true); }} 
+            className="shrink-0 bg-fin-midnight hover:bg-fin-ink text-fin-paper font-black py-3 px-6 md:py-4 md:px-10 rounded-2xl flex items-center gap-2 transition-all shadow-xl active:scale-95"
+          >
+            <Plus className="w-4 h-4" />
+            <span className="uppercase tracking-[0.2em] text-[8px] md:text-[10px]">錄入 ENTRY</span>
           </button>
         </div>
 

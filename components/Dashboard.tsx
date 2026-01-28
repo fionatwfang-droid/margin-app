@@ -57,13 +57,13 @@ const Dashboard: React.FC<Props> = ({ transactions, accounts, budgets, totalBudg
   const totalBudgetProgress = displayTotalBudget === 0 ? 0 : (thisMonthSpending / displayTotalBudget) * 100;
 
   return (
-    <div className="space-y-6 md:space-y-10 fade-up">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-        <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-fin-ink/5 relative overflow-hidden group">
-          <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-fin-linen mb-4">Net Worth / 總資產</p>
-          <h3 className="text-3xl font-black text-fin-ink tracking-tight mb-2">${totalBalance.toLocaleString()}</h3>
-          <div className="mt-6 space-y-3">
-             <div className="flex justify-between items-center text-[9px] font-bold text-fin-wood/40 uppercase">
+    <div className="space-y-6 md:space-y-10 fade-up pb-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-8">
+        <div className="bg-white p-6 md:p-8 rounded-[2rem] shadow-sm border border-fin-ink/5 relative overflow-hidden group">
+          <p className="text-[9px] font-black uppercase tracking-[0.3em] text-fin-linen mb-3">Net Worth / 總資產</p>
+          <h3 className="text-2xl md:text-3xl font-black text-fin-ink tracking-tight mb-1">${totalBalance.toLocaleString()}</h3>
+          <div className="mt-5 space-y-2.5">
+             <div className="flex justify-between items-center text-[8px] font-black text-fin-wood/40 uppercase">
                 <span>Liquidity 現金</span>
                 <span className="text-fin-midnight">${cashAssets.toLocaleString()}</span>
              </div>
@@ -73,39 +73,39 @@ const Dashboard: React.FC<Props> = ({ transactions, accounts, budgets, totalBudg
           </div>
         </div>
 
-        <div className="bg-fin-midnight p-8 rounded-[2.5rem] shadow-xl text-fin-paper relative overflow-hidden">
-          <div className="flex justify-between items-center mb-6">
-            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-fin-linen">Credit Bill / 帳單支援</p>
-            <CreditIcon className="w-4 h-4 text-fin-linen" />
+        <div className="bg-fin-midnight p-6 md:p-8 rounded-[2rem] shadow-xl text-fin-paper relative overflow-hidden">
+          <div className="flex justify-between items-center mb-5">
+            <p className="text-[9px] font-black uppercase tracking-[0.3em] text-fin-linen">Credit Bill / 帳單支援</p>
+            <CreditIcon className="w-3.5 h-3.5 text-fin-linen" />
           </div>
           {creditReminders.length > 0 ? (
             <div className="space-y-2">
-              <span className="text-sm font-black">{creditReminders[0].name}</span>
-              <div className="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/10">
-                <TrendingDown className="w-3.5 h-3.5 text-fin-linen" />
-                <p className="text-[10px] font-bold">還款倒數 <span className="text-fin-linen">{creditReminders[0].daysUntilDue}</span> 天</p>
+              <span className="text-sm font-black tracking-tight">{creditReminders[0].name}</span>
+              <div className="flex items-center gap-2 p-2.5 bg-white/5 rounded-xl border border-white/10">
+                <TrendingDown className="w-3 h-3 text-fin-linen" />
+                <p className="text-[9px] font-black tracking-widest">還款倒數 <span className="text-fin-linen">{creditReminders[0].daysUntilDue}</span> 天</p>
               </div>
             </div>
           ) : (
-            <p className="text-[10px] font-bold text-white/20 italic py-4">無信用卡數據</p>
+            <p className="text-[9px] font-black text-white/20 italic py-4">無信用卡數據</p>
           )}
         </div>
 
-        <div className="bg-fin-paper p-8 rounded-[2.5rem] border border-fin-linen/20 cursor-pointer" onClick={() => setIsBudgetModalOpen(true)}>
-          <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-fin-midnight mb-6">Budget / 預算進度 (點擊設定)</p>
-          <div className="flex items-end gap-3 mb-4">
-            <h3 className="text-4xl font-black text-fin-ink">{Math.floor(totalBudgetProgress)}%</h3>
-            <span className="text-[10px] font-bold text-fin-wood/40 mb-2 uppercase tracking-widest">Spent</span>
+        <div className="bg-fin-paper p-6 md:p-8 rounded-[2rem] border border-fin-linen/20 cursor-pointer active:scale-[0.98] transition-all" onClick={() => setIsBudgetModalOpen(true)}>
+          <p className="text-[9px] font-black uppercase tracking-[0.3em] text-fin-midnight mb-5">Budget / 預算進度</p>
+          <div className="flex items-end gap-2 mb-3">
+            <h3 className="text-3xl md:text-4xl font-black text-fin-ink">{Math.floor(totalBudgetProgress)}%</h3>
+            <span className="text-[9px] font-black text-fin-wood/40 mb-1.5 uppercase tracking-widest">Spent</span>
           </div>
-          <div className="w-full bg-white/50 h-1.5 rounded-full overflow-hidden">
+          <div className="w-full bg-white/50 h-1 rounded-full overflow-hidden">
              <div className={`h-full ${totalBudgetProgress > 90 ? 'bg-red-600' : 'bg-fin-midnight'}`} style={{ width: `${Math.min(totalBudgetProgress, 100)}%` }}></div>
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-        <div className="lg:col-span-2 bg-white p-10 rounded-[3rem] shadow-sm border border-fin-ink/5 overflow-hidden h-[400px]">
-          <h4 className="text-xl font-bold text-fin-ink tracking-tight mb-8 uppercase">Velocity / 支出流速</h4>
+        <div className="lg:col-span-2 bg-white p-6 md:p-10 rounded-[2.5rem] shadow-sm border border-fin-ink/5 overflow-hidden h-[350px]">
+          <h4 className="text-lg font-black text-fin-ink tracking-tight mb-6 uppercase">Velocity / 支出流速</h4>
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={last7Days}>
               <defs>
@@ -115,9 +115,12 @@ const Dashboard: React.FC<Props> = ({ transactions, accounts, budgets, totalBudg
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="1 5" vertical={false} stroke="#0a0908" strokeOpacity={0.05} />
-              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#0a0908', fontSize: 10, fontWeight: 700, opacity: 0.2}} dy={10} />
+              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#0a0908', fontSize: 9, fontWeight: 900, opacity: 0.2}} dy={10} />
               <YAxis hide />
-              <Tooltip contentStyle={{ borderRadius: '20px', border: 'none', background: '#22333b', color: '#eae0d5', fontSize: '11px', fontWeight: '700' }} />
+              <Tooltip 
+                contentStyle={{ borderRadius: '15px', border: 'none', background: '#22333b', color: '#eae0d5', fontSize: '10px', fontWeight: '900', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' }}
+                cursor={{ stroke: '#c6ac8f', strokeWidth: 1, strokeDasharray: '3 3' }}
+              />
               <Area type="monotone" dataKey="value" stroke="#c6ac8f" strokeWidth={3} fill="url(#areaGrad)" />
             </AreaChart>
           </ResponsiveContainer>
