@@ -168,7 +168,10 @@ const App: React.FC = () => {
           <div className="bg-white rounded-[2rem] shadow-sm border border-fin-ink/5 overflow-hidden fade-up">
             <div className="p-6 md:p-10">
               <div className="flex flex-col lg:flex-row justify-between items-center gap-6 mb-10">
-                <h2 className="text-xl font-bold text-fin-ink tracking-tight uppercase">收支明細</h2>
+                <div>
+                  <h2 className="text-xl font-bold text-fin-ink tracking-tight uppercase mb-1">收支明細</h2>
+                  <p className="text-[7px] font-black text-fin-wood/40 uppercase tracking-[0.2em]">Transaction Ledger / 歷史清單</p>
+                </div>
                 <div className="relative w-full lg:max-w-md">
                   <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-fin-linen w-4 h-4" />
                   <input
@@ -180,7 +183,7 @@ const App: React.FC = () => {
                   />
                 </div>
                 <div className="flex gap-4 w-full lg:w-auto">
-                   <button onClick={() => setIsCSVModalOpen(true)} className="flex-1 lg:flex-none flex items-center justify-center gap-2 px-6 py-3.5 bg-fin-midnight text-fin-paper rounded-xl font-bold text-[9px] uppercase tracking-widest"><FileUp className="w-4 h-4" />匯入</button>
+                   <button onClick={() => setIsCSVModalOpen(true)} className="flex-1 lg:flex-none flex items-center justify-center gap-2 px-6 py-3.5 bg-fin-midnight text-fin-paper rounded-xl font-bold text-[9px] uppercase tracking-widest"><FileUp className="w-4 h-4" />匯入 IMPORT</button>
                 </div>
               </div>
               <div className="space-y-3">
@@ -222,24 +225,25 @@ const App: React.FC = () => {
   return (
     <Layout activeTab={activeTab} setActiveTab={setActiveTab}>
       <div className="max-w-7xl mx-auto">
-        {/* Responsive Header for Mobile */}
-        <div className="flex flex-row justify-between items-start mb-8 gap-4 fade-up">
+        {/* Main Content Header - Brand subtiles now managed in Layout sidebar */}
+        <div className="flex flex-row justify-between items-start mb-10 gap-4 fade-up">
           <div className="flex-1 space-y-1">
-            <p className="text-fin-linen font-black text-[7px] md:text-[9px] uppercase tracking-[0.4em]">Journal Flow</p>
-            <h2 className="text-2xl md:text-4xl font-black text-fin-ink tracking-tight leading-none">今日財務覺醒</h2>
+            <h2 className="text-2xl md:text-4xl font-black text-fin-ink tracking-tight leading-none mb-1">
+              今日財務覺醒
+            </h2>
             
-            <div className="flex flex-wrap items-center gap-3 mt-3">
+            <div className="flex flex-wrap items-center gap-3 mt-4">
               <button onClick={() => setIsSyncModalOpen(true)} className="flex items-center gap-1.5 opacity-40 hover:opacity-100 transition-all">
                 <RefreshCw className="w-2.5 h-2.5" />
-                <span className="text-[7px] font-black uppercase tracking-widest">Sync</span>
+                <span className="text-[7px] font-black uppercase tracking-widest">Cross-Sync</span>
               </button>
               {user ? (
                 <div className="flex items-center gap-1.5 text-fin-midnight text-[7px] font-black uppercase tracking-widest">
-                  <Cloud className="w-3 h-3 text-blue-500" /> Cloud
+                  <Cloud className="w-3 h-3 text-blue-500" /> Cloud Synced
                 </div>
               ) : (
                 <button onClick={() => setIsAuthModalOpen(true)} className="flex items-center gap-1.5 text-fin-wood/40 hover:text-fin-midnight transition-all text-[7px] font-black uppercase tracking-widest">
-                  <CloudOff className="w-3 h-3" /> Enable
+                  <CloudOff className="w-3 h-3" /> Enable Cloud Sync
                 </button>
               )}
             </div>

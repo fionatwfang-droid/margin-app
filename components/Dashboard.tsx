@@ -60,11 +60,11 @@ const Dashboard: React.FC<Props> = ({ transactions, accounts, budgets, totalBudg
     <div className="space-y-6 md:space-y-10 fade-up pb-10">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-8">
         <div className="bg-white p-6 md:p-8 rounded-[2rem] shadow-sm border border-fin-ink/5 relative overflow-hidden group">
-          <p className="text-[9px] font-black uppercase tracking-[0.3em] text-fin-linen mb-3">Net Worth / 總資產</p>
+          <p className="text-[9px] font-black uppercase tracking-[0.3em] text-fin-linen mb-3">NET WORTH / 總資產</p>
           <h3 className="text-2xl md:text-3xl font-black text-fin-ink tracking-tight mb-1">${totalBalance.toLocaleString()}</h3>
           <div className="mt-5 space-y-2.5">
              <div className="flex justify-between items-center text-[8px] font-black text-fin-wood/40 uppercase">
-                <span>Liquidity 現金</span>
+                <span>LIQUIDITY 現金</span>
                 <span className="text-fin-midnight">${cashAssets.toLocaleString()}</span>
              </div>
              <div className="w-full bg-fin-paper h-1 rounded-full overflow-hidden">
@@ -75,7 +75,7 @@ const Dashboard: React.FC<Props> = ({ transactions, accounts, budgets, totalBudg
 
         <div className="bg-fin-midnight p-6 md:p-8 rounded-[2rem] shadow-xl text-fin-paper relative overflow-hidden">
           <div className="flex justify-between items-center mb-5">
-            <p className="text-[9px] font-black uppercase tracking-[0.3em] text-fin-linen">Credit Bill / 帳單支援</p>
+            <p className="text-[9px] font-black uppercase tracking-[0.3em] text-fin-linen">CREDIT BILL / 帳單支援</p>
             <CreditIcon className="w-3.5 h-3.5 text-fin-linen" />
           </div>
           {creditReminders.length > 0 ? (
@@ -92,10 +92,10 @@ const Dashboard: React.FC<Props> = ({ transactions, accounts, budgets, totalBudg
         </div>
 
         <div className="bg-fin-paper p-6 md:p-8 rounded-[2rem] border border-fin-linen/20 cursor-pointer active:scale-[0.98] transition-all" onClick={() => setIsBudgetModalOpen(true)}>
-          <p className="text-[9px] font-black uppercase tracking-[0.3em] text-fin-midnight mb-5">Budget / 預算進度</p>
+          <p className="text-[9px] font-black uppercase tracking-[0.3em] text-fin-midnight mb-5">BUDGET / 預算進度</p>
           <div className="flex items-end gap-2 mb-3">
             <h3 className="text-3xl md:text-4xl font-black text-fin-ink">{Math.floor(totalBudgetProgress)}%</h3>
-            <span className="text-[9px] font-black text-fin-wood/40 mb-1.5 uppercase tracking-widest">Spent</span>
+            <span className="text-[9px] font-black text-fin-wood/40 mb-1.5 uppercase tracking-widest">Spent / 已支出</span>
           </div>
           <div className="w-full bg-white/50 h-1 rounded-full overflow-hidden">
              <div className={`h-full ${totalBudgetProgress > 90 ? 'bg-red-600' : 'bg-fin-midnight'}`} style={{ width: `${Math.min(totalBudgetProgress, 100)}%` }}></div>
@@ -105,7 +105,8 @@ const Dashboard: React.FC<Props> = ({ transactions, accounts, budgets, totalBudg
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
         <div className="lg:col-span-2 bg-white p-6 md:p-10 rounded-[2.5rem] shadow-sm border border-fin-ink/5 overflow-hidden h-[350px]">
-          <h4 className="text-lg font-black text-fin-ink tracking-tight mb-6 uppercase">Velocity / 支出流速</h4>
+          <h4 className="text-lg font-black text-fin-ink tracking-tight mb-2 uppercase">VELOCITY / 支出流速</h4>
+          <p className="text-[7px] font-black text-fin-wood/30 uppercase tracking-[0.2em] mb-6">Spending Trends / 趨勢分析</p>
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={last7Days}>
               <defs>

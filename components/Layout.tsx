@@ -34,29 +34,41 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab }) =>
   }, []);
 
   const navItems = [
-    { id: 'dashboard', label: '財務總覽', icon: 'TrendingUp' },
-    { id: 'history', label: '收支清單', icon: 'Calendar' },
-    { id: 'analysis', label: '收支分析', icon: 'PieChart' },
-    { id: 'accounts', label: '資產帳戶', icon: 'Wallet' },
-    { id: 'ai', label: '智慧分析', icon: 'BrainCircuit' },
+    { id: 'dashboard', label: '財務總覽', en: 'Dashboard', icon: 'TrendingUp' },
+    { id: 'history', label: '收支清單', en: 'Ledger', icon: 'Calendar' },
+    { id: 'analysis', label: '收支分析', en: 'Analytics', icon: 'PieChart' },
+    { id: 'accounts', label: '資產帳戶', en: 'Assets', icon: 'Wallet' },
+    { id: 'ai', label: '智慧分析', en: 'AI Coach', icon: 'BrainCircuit' },
   ];
+
+  const activeItem = navItems.find(n => n.id === activeTab);
 
   return (
     <div className="flex bg-fin-paper h-[100dvh] w-screen overflow-hidden">
       {/* Desktop Sidebar */}
       <aside className="hidden md:flex flex-col w-80 bg-fin-paper border-r border-fin-ink/5 overflow-y-auto no-scrollbar">
-        <div className="p-12">
-          <div className="flex items-center gap-5 mb-8">
+        <div className="p-12 pb-6">
+          {/* Logo & Title */}
+          <div className="flex items-center gap-5 mb-5">
             <LogoIcon className="w-14 h-14 shadow-2xl rounded-[1.5rem]" />
             <div className="flex flex-col">
               <h1 className="text-2xl font-bold text-fin-ink tracking-tight flex items-baseline gap-1">
                 留白 <span className="text-xs font-light italic text-fin-linen">Margin</span>
               </h1>
-              <p className="text-[8px] font-bold text-fin-wood/30 uppercase tracking-[0.4em]">Essence of Flow</p>
             </div>
           </div>
           
-          <div className="space-y-2">
+          {/* Brand Subtitles - Identity section */}
+          <div className="mb-10 space-y-1.5 pl-1">
+            <p className="text-[7px] font-black text-fin-linen uppercase tracking-[0.35em] leading-tight">
+              AT THE EDGE OF BALANCE
+            </p>
+            <p className="text-[10px] font-medium text-fin-wood/60 italic leading-relaxed">
+              於繁雜帳目中，尋一份生活餘裕。
+            </p>
+          </div>
+          
+          <div className="space-y-2 mb-6">
             <div className="flex items-center gap-2 px-4 py-2 bg-fin-midnight/5 border border-fin-midnight/10 rounded-full w-fit">
               <div className="w-1.5 h-1.5 bg-green-600 rounded-full animate-pulse"></div>
               <span className="text-[8px] font-bold uppercase text-fin-midnight/60 tracking-widest flex items-center gap-1">
@@ -77,6 +89,7 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab }) =>
           </div>
         </div>
         
+        {/* Navigation Tabs (Functional Tabs) */}
         <nav className="flex-1 px-8 space-y-4">
           {navItems.map((item) => (
             <button
@@ -130,17 +143,18 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab }) =>
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col min-w-0 relative h-[100dvh]">
-        {/* Mobile-optimized Header with Safe Area handling */}
+      <main className="flex-1 flex flex-col min-0 relative h-[100dvh]">
         <header className="shrink-0 bg-fin-paper/90 backdrop-blur-lg flex items-center justify-between px-6 md:px-12 pt-[env(safe-area-inset-top)] pb-4 z-30 border-b border-fin-ink/5">
           <div className="flex items-center gap-4 mt-2">
             <div className="md:hidden">
                <LogoIcon className="w-9 h-9 shadow-md rounded-xl" />
             </div>
             <div className="flex flex-col">
-              <p className="text-[7px] font-black text-fin-linen uppercase tracking-[0.3em] mb-0.5">Navigation / {activeTab}</p>
+              <p className="text-[7px] font-black text-fin-linen uppercase tracking-[0.3em] mb-0.5">
+                NAVIGATION / {activeItem?.en || 'SYSTEM'}
+              </p>
               <h2 className="text-lg md:text-xl font-black text-fin-ink tracking-tight">
-                {navItems.find(n => n.id === activeTab)?.label}
+                {activeItem?.label}
               </h2>
             </div>
           </div>
@@ -153,12 +167,11 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab }) =>
           )}
         </header>
         
-        {/* Main Content Area: Padding bottom ensures content isn't covered by mobile nav */}
         <div className="flex-1 overflow-y-auto no-scrollbar px-6 md:px-12 pt-6 pb-[calc(110px+env(safe-area-inset-bottom))]">
           {children}
         </div>
 
-        {/* Mobile Nav: Elevated slightly for iPhone Home Indicator */}
+        {/* Mobile Nav */}
         <nav className="md:hidden fixed bottom-6 left-4 right-4 bg-fin-midnight/95 backdrop-blur-xl text-fin-paper rounded-[2.5rem] flex justify-around p-3 z-50 shadow-2xl border border-fin-linen/10 mb-[env(safe-area-inset-bottom)]">
           {navItems.map((item) => (
             <button
